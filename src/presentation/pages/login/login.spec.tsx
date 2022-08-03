@@ -7,6 +7,7 @@ import {
   waitFor
 } from '@testing-library/react'
 import { faker } from '@faker-js/faker'
+import 'jest-localstorage-mock'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
 import Login from './login'
@@ -75,6 +76,10 @@ const simulateStatusForField = (
 }
 
 describe('Login Component', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
   afterEach(() => {
     cleanup()
   })
@@ -188,5 +193,16 @@ describe('Login Component', () => {
     const mainError = sut.getByTestId('main-error')
     expect(mainError.textContent).toBe(error.message)
     expect(errorWrap.childElementCount).toBe(1)
+  })
+
+  test('should add accessToken to local storage on success', async () => {
+    const { sut, authenticationSpy } = makeSut()
+
+    simulateValidSubmit(sut)
+
+    await waitFor(() => expect(localStorage.setItem).toHaveBeenCalledWith(
+      'accessToken',
+      authenticationSpy.account.accessToken
+    ))
   })
 })
