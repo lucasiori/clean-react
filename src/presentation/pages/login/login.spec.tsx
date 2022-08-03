@@ -1,24 +1,45 @@
 import React from 'react'
 import { cleanup, fireEvent, render, RenderResult } from '@testing-library/react'
 import { faker } from '@faker-js/faker'
+import { Authentication, AuthenticationParams } from '@/domain/usecases'
+import { AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/domain/test'
 import { ValidationStub } from '@/presentation/test'
 import Login from './login'
 
 type SutTypes = {
   sut: RenderResult
+  authenticationSpy: AuthenticationSpy
 }
 
 type SutParams = {
   validationError: string
 }
 
+class AuthenticationSpy implements Authentication {
+  account = mockAccountModel()
+  params: AuthenticationParams
+
+  async auth (params: AuthenticationParams): Promise<AccountModel> {
+    this.params = params
+    return Promise.resolve(this.account)
+  }
+}
+
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
 
-  const sut = render(<Login validation={validationStub} />)
+  const authenticationSpy = new AuthenticationSpy()
 
-  return { sut }
+  const sut = render(
+    <Login
+      validation={validationStub}
+      authentication={authenticationSpy}
+    />
+  )
+
+  return { sut, authenticationSpy }
 }
 
 describe('Login Component', () => {
@@ -42,7 +63,7 @@ describe('Login Component', () => {
     expect(passwordStatus.textContent).toBe('🔴')
   })
 
-  test('should show email error if validation fails', () => {
+  test('should show email error if Validation fails', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
     const emailInput = sut.getByTestId('email')
@@ -54,7 +75,7 @@ describe('Login Component', () => {
     expect(emailStatus.textContent).toBe('🔴')
   })
 
-  test('should show password error if validation fails', () => {
+  test('should show password error if Validation fails', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
     const passwordInput = sut.getByTestId('password')
@@ -66,7 +87,7 @@ describe('Login Component', () => {
     expect(passwordStatus.textContent).toBe('🔴')
   })
 
-  test('should show valid email state if validation succeeds', () => {
+  test('should show valid email state if Validation succeeds', () => {
     const { sut } = makeSut()
     const emailInput = sut.getByTestId('email')
 
@@ -77,7 +98,7 @@ describe('Login Component', () => {
     expect(emailStatus.textContent).toBe('🟢')
   })
 
-  test('should show valid password state if validation succeeds', () => {
+  test('should show valid password state if Validation succeeds', () => {
     const { sut } = makeSut()
     const passwordInput = sut.getByTestId('password')
 
@@ -112,5 +133,20 @@ describe('Login Component', () => {
 
     const spinner = sut.getByTestId('spinner')
     expect(spinner).toBeTruthy()
+  })
+
+  test('should call Authentication with correct values', () => {
+    const { sut, authenticationSpy } = makeSut()
+    const email = faker.internet.email()
+    const password = faker.internet.password()
+    const emailInput = sut.getByTestId('email')
+    const passwordInput = sut.getByTestId('password')
+    const submitButton = sut.getByTestId('submit')
+
+    fireEvent.input(emailInput, { target: { value: email } })
+    fireEvent.input(passwordInput, { target: { value: password } })
+    fireEvent.click(submitButton)
+
+    expect(authenticationSpy.params).toEqual({ email, password })
   })
 })
