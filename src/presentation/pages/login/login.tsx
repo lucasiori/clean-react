@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Authentication } from '@/domain/usecases'
 import Context from '@/presentation/contexts/form/form-context'
 import { Validation } from '@/presentation/protocols/validation'
@@ -68,7 +69,9 @@ const Login: React.FC<Props> = ({ validation, authentication }) => {
             Entrar
           </button>
 
-          <span className={Styles.link}>Criar conta</span>
+          <Link to="/signup" className={Styles.link} data-testid="signup">
+            Criar conta
+          </Link>
 
           <FormStatus />
         </form>
