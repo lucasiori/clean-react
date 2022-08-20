@@ -1,7 +1,7 @@
 {
   "name": "clean-react",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "React JS using TDD, Clean Architecture and Typescript",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --open",
@@ -11,7 +11,7 @@
     "test:ci": "npm test -- --coverage"
   },
   "keywords": [],
-  "author": "",
+  "author": "Lucas Iori",
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
