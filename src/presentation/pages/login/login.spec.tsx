@@ -12,7 +12,7 @@ import { faker } from '@faker-js/faker'
 import 'jest-localstorage-mock'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
-import Login from './login'
+import { Login } from '@/presentation/pages'
 
 type SutTypes = {
   sut: RenderResult
