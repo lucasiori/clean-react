@@ -9,14 +9,14 @@ import {
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { faker } from '@faker-js/faker'
-import 'jest-localstorage-mock'
 import { InvalidCredentialsError } from '@/domain/errors'
-import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
+import { AuthenticationSpy, SaveAccessTokenMock, ValidationStub } from '@/presentation/test'
 import { Login } from '@/presentation/pages'
 
 type SutTypes = {
   sut: RenderResult
   authenticationSpy: AuthenticationSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 
 type SutParams = {
@@ -29,6 +29,8 @@ const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
 
+  const saveAccessTokenMock = new SaveAccessTokenMock()
+
   const authenticationSpy = new AuthenticationSpy()
 
   const sut = render(
@@ -36,11 +38,12 @@ const makeSut = (params?: SutParams): SutTypes => {
       <Login
         validation={validationStub}
         authentication={authenticationSpy}
+        saveAccessToken={saveAccessTokenMock}
       />
     </Router>
   )
 
-  return { sut, authenticationSpy }
+  return { sut, authenticationSpy, saveAccessTokenMock }
 }
 
 const populateEmailField = (
@@ -110,10 +113,6 @@ const testElementButtonIsDisabled = (
 }
 
 describe('Login Component', () => {
-  beforeEach(() => {
-    localStorage.clear()
-  })
-
   afterEach(() => {
     cleanup()
   })
@@ -222,14 +221,13 @@ describe('Login Component', () => {
     testErrorWrapChildCount(sut, 1)
   })
 
-  test('should add accessToken to local storage on success', async () => {
-    const { sut, authenticationSpy } = makeSut()
+  test('should call SaveAccessToken on success', async () => {
+    const { sut, authenticationSpy, saveAccessTokenMock } = makeSut()
 
     simulateValidSubmit(sut)
 
     await waitFor(() => {
-      expect(localStorage.setItem).toHaveBeenCalledWith(
-        'accessToken',
+      expect(saveAccessTokenMock.accessToken).toBe(
         authenticationSpy.account.accessToken
       )
       expect(history.length).toBe(1)
