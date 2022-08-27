@@ -41,7 +41,7 @@ describe('RemoteAddAccount', () => {
     expect(httpPostClientSpy.body).toEqual(addAccountParams)
   })
 
-  test('should throw InvalidCredentialsError if HttpPostClient returns 400', async () => {
+  test('should throw UnexpectedError if HttpPostClient returns 400', async () => {
     const { sut, httpPostClientSpy } = makeSut()
     httpPostClientSpy.response = {
       statusCode: HttpStatusCode.badRequest
