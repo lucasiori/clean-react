@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { mockAddAccountParams } from '@/domain/test'
-import { EmailInUseError } from '@/domain/errors'
+import { EmailInUseError, UnexpectedError } from '@/domain/errors'
 import { AccountModel } from '@/domain/models/account-model'
 import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpPostClientSpy } from '@/data/test'
@@ -39,6 +39,17 @@ describe('RemoteAddAccount', () => {
     await sut.add(addAccountParams)
 
     expect(httpPostClientSpy.body).toEqual(addAccountParams)
+  })
+
+  test('should throw InvalidCredentialsError if HttpPostClient returns 400', async () => {
+    const { sut, httpPostClientSpy } = makeSut()
+    httpPostClientSpy.response = {
+      statusCode: HttpStatusCode.badRequest
+    }
+
+    const promise = sut.add(mockAddAccountParams())
+
+    await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 
   test('should throw EmailInUseError if HttpPostClient returns 403', async () => {
