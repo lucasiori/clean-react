@@ -3,4 +3,4 @@ node_js:
   - 12
 script:
   - eslint 'scr/**'
-  - npm run test:ci
+  - npm run test:coveralls
