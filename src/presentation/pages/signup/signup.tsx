@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { AddAccount, SaveAccessToken } from '@/domain/usecases'
 import Context from '@/presentation/contexts/form/form-context'
 import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/components'
@@ -101,9 +101,9 @@ const SignUp: React.FC<Props> = ({
             Criar conta
           </button>
 
-          <span className={Styles.link}>
+          <Link replace to="/login" className={Styles.link} data-testid="login-link">
             Voltar para login
-          </span>
+          </Link>
 
           <FormStatus />
         </form>
