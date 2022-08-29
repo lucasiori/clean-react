@@ -28,9 +28,7 @@ const history = createMemoryHistory({ initialEntries: ['/login'] })
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
-
   const saveAccessTokenMock = new SaveAccessTokenMock()
-
   const authenticationSpy = new AuthenticationSpy()
 
   const sut = render(
