@@ -58,11 +58,6 @@ const simulateValidSubmit = (
   fireEvent.click(submitButton)
 }
 
-const testElementExists = (sut: RenderResult, fieldName: string): void => {
-  const element = sut.getByTestId(fieldName)
-  expect(element).toBeTruthy()
-}
-
 const testElementText = (
   sut: RenderResult,
   fieldName: string,
@@ -135,7 +130,7 @@ describe('Login Component', () => {
 
     simulateValidSubmit(sut)
 
-    testElementExists(sut, 'spinner')
+    Helper.testElementExists(sut, 'spinner')
   })
 
   test('should call Authentication with correct values', () => {

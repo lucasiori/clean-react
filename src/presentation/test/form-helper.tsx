@@ -1,7 +1,11 @@
 import { fireEvent, RenderResult } from '@testing-library/react'
 import { faker } from '@faker-js/faker'
 
-export const testChildCount = (sut: RenderResult, fieldName: string, count: number): void => {
+export const testChildCount = (
+  sut: RenderResult,
+  fieldName: string,
+  count: number
+): void => {
   const elementWrapper = sut.getByTestId(fieldName)
   expect(elementWrapper.childElementCount).toBe(count)
 }
@@ -32,4 +36,9 @@ export const populateField = (
 ): void => {
   const input = sut.getByTestId(fieldName)
   fireEvent.input(input, { target: { value } })
+}
+
+export const testElementExists = (sut: RenderResult, fieldName: string): void => {
+  const element = sut.getByTestId(fieldName)
+  expect(element).toBeTruthy()
 }
