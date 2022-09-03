@@ -96,12 +96,7 @@ describe('Login', () => {
   })
 
   it('should not call submit if form is invalid', () => {
-    cy.intercept({ method: 'POST', url: /login/ }, (req) => {
-      req.continue(res => {
-        res.statusCode = 200
-        res.body.accessToken = faker.datatype.uuid()
-      })
-    }).as('request')
+    Http.mockOk()
 
     cy.getByTestId('email').focus().type(faker.internet.email())
 
