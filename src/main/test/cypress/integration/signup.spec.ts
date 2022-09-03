@@ -106,6 +106,7 @@ describe('SignUp', () => {
     Http.mockOk()
 
     populateFields()
+
     cy.getByTestId('submit').dblclick()
 
     FormHelper.testHttpCallsCount(1)
