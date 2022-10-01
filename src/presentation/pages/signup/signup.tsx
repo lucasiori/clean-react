@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { AddAccount, UpdateCurrentAccount } from '@/domain/usecases'
-import Context from '@/presentation/contexts/form/form-context'
+import { AddAccount } from '@/domain/usecases'
+import { ApiContext, FormContext } from '@/presentation/contexts'
 import {
   Footer,
   FormStatus,
@@ -15,15 +15,15 @@ import Styles from './signup-styles.scss'
 type Props = {
   validation: Validation
   addAccount: AddAccount
-  updateCurrentAccount: UpdateCurrentAccount
 }
 
 const SignUp: React.FC<Props> = ({
   validation,
-  addAccount,
-  updateCurrentAccount
+  addAccount
 }) => {
   const history = useHistory()
+
+  const { setCurrentAccount } = useContext(ApiContext)
 
   const [state, setState] = useState({
     isLoading: false,
@@ -55,7 +55,7 @@ const SignUp: React.FC<Props> = ({
         passwordConfirmation: state.passwordConfirmation
       })
 
-      await updateCurrentAccount.save(account)
+      setCurrentAccount(account)
       history.replace('/')
     } catch (error) {
       setState({ ...state, isLoading: false, mainError: error.message })
@@ -92,7 +92,7 @@ const SignUp: React.FC<Props> = ({
     <div className={Styles.signupWrap}>
       <LoginHeader />
 
-      <Context.Provider value={{ state, setState }}>
+      <FormContext.Provider value={{ state, setState }}>
         <form className={Styles.form} onSubmit={handleSubmit} data-testid="form">
           <h2>Criar conta</h2>
 
@@ -109,7 +109,7 @@ const SignUp: React.FC<Props> = ({
 
           <FormStatus />
         </form>
-      </Context.Provider>
+      </FormContext.Provider>
 
       <Footer />
     </div>
