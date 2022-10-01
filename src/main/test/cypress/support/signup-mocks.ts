@@ -9,10 +9,13 @@ export const mockUnexpectedError = (): void => {
   return Helper.mockUnexpectedError('POST', /signup/)
 }
 
-export const mockInvalidData = (): void => {
-  return Helper.mockOk('POST', /signup/, { invalidProperty: faker.random.words() })
+export const mockOk = (): void => {
+  return Helper.mockOk('POST', /login/, {
+    accessToken: faker.datatype.uuid(),
+    name: faker.name.fullName()
+  })
 }
 
-export const mockOk = (): void => {
-  return Helper.mockOk('POST', /signup/, { accessToken: faker.datatype.uuid() })
+export const mockInvalidData = (): void => {
+  return Helper.mockOk('POST', /signup/, { invalidProperty: faker.random.words() })
 }
