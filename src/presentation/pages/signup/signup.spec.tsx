@@ -65,8 +65,8 @@ describe('SignUp Component', () => {
     Helper.testStatusForField('email', validationError)
     Helper.testStatusForField('password', validationError)
     Helper.testStatusForField('passwordConfirmation', validationError)
-    Helper.testChildCount('error-wrap', 0)
-    Helper.testButtonIsDisabled('submit', true)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(0)
+    expect(screen.getByTestId('submit')).toBeDisabled()
   })
 
   test('should show name error if Validation fails', () => {
@@ -145,7 +145,7 @@ describe('SignUp Component', () => {
     Helper.populateField('password')
     Helper.populateField('passwordConfirmation')
 
-    Helper.testButtonIsDisabled('submit', false)
+    expect(screen.getByTestId('submit')).toBeEnabled()
   })
 
   test('should show spinner on submit', async () => {
@@ -153,7 +153,7 @@ describe('SignUp Component', () => {
 
     await simulateValidSubmit()
 
-    Helper.testElementExists('spinner')
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument()
   })
 
   test('should call AddAccount with correct values', async () => {
@@ -198,8 +198,8 @@ describe('SignUp Component', () => {
     await simulateValidSubmit()
     await waitFor(() => screen.getByTestId('main-error'))
 
-    Helper.testElementText('main-error', error.message)
-    Helper.testChildCount('error-wrap', 1)
+    expect(screen.getByTestId('main-error')).toHaveTextContent(error.message)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
   })
 
   test('should call SaveAccessToken on success', async () => {
