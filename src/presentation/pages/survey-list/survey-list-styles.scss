@@ -30,9 +30,8 @@
       flex-wrap: wrap;
       justify-content: space-between;
 
-
       li {
-        height: 250px;
+        min-height: 250px;
         display: flex;
         flex-basis: 48%;
         flex-direction: column;
@@ -92,6 +91,7 @@
           }
 
           p {
+            flex-grow: 1;
             align-self: center;
             font-size: 18px;
             margin: 24px;
@@ -110,6 +110,20 @@
           &:hover {
             background-color: $primaryDark;
           }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .surveyListWrap {
+    .contentWrap {
+      ul {
+        flex-direction: column;
+
+        li {
+          flex-basis: 100%;
         }
       }
     }
