@@ -11,7 +11,7 @@ type Props = {
   className?: string
 }
 
-const Icon: React.FC<Props> = ({ iconName, className = '' }) => {
+const Icon: React.FC<Props> = ({ iconName, className }) => {
   const iconColor = iconName === IconName.thumbDown ? Styles.red : Styles.green
 
   return (
