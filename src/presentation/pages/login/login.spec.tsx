@@ -8,15 +8,16 @@ import {
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { faker } from '@faker-js/faker'
-import { AccountModel } from '@/domain/models'
+import { Authentication } from '@/domain/usecases'
 import { InvalidCredentialsError } from '@/domain/errors'
-import { AuthenticationSpy, Helper, ValidationStub } from '@/presentation/test'
+import { AuthenticationSpy } from '@/domain/test'
+import { Helper, ValidationStub } from '@/presentation/test'
 import { Login } from '@/presentation/pages'
 import { ApiContext } from '@/presentation/contexts'
 
 type SutTypes = {
   authenticationSpy: AuthenticationSpy
-  setCurrentAccountMock: (account: AccountModel) => void
+  setCurrentAccountMock: (account: Authentication.Model) => void
 }
 
 type SutParams = {
