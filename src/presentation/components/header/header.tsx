@@ -5,7 +5,10 @@ import { ApiContext } from '@/presentation/contexts'
 import Styles from './header-styles.scss'
 
 const Header: React.FC = () => {
-  const { setCurrentAccount } = useContext(ApiContext)
+  const {
+    getCurrentAccount,
+    setCurrentAccount
+  } = useContext(ApiContext)
   const history = useHistory()
 
   const logout = (
@@ -23,7 +26,7 @@ const Header: React.FC = () => {
         <Logo />
 
         <div className={Styles.logoutWrap}>
-          <span>Lucas</span>
+          <span data-testid="username">{getCurrentAccount().name}</span>
           <a href="#" data-testid="logout" onClick={logout}>Sair</a>
         </div>
       </div>
