@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { HttpStatusCode } from '@/data/protocols/http'
-import { HttpGetClientSpy } from '@/data/test'
+import { HttpGetClientSpy, mockRemoteSurveyResultModel } from '@/data/test'
 import { RemoteLoadSurveyResult } from './remote-load-survey-result'
 
 type SutType = {
@@ -20,6 +20,10 @@ describe('RemoteLoadSurveyResult', () => {
   test('should call HttpGetClient with correct URL', async () => {
     const url = faker.internet.url()
     const { sut, httpGetClientSpy } = makeSut(url)
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: mockRemoteSurveyResultModel()
+    }
 
     await sut.load()
 
@@ -57,5 +61,21 @@ describe('RemoteLoadSurveyResult', () => {
     const promise = sut.load()
 
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  test('should return a SurveyResult.Model if HttpGetClient returns 200', async () => {
+    const { sut, httpGetClientSpy } = makeSut()
+    const httpResult = mockRemoteSurveyResultModel()
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: httpResult
+    }
+
+    const httpResponse = await sut.load()
+
+    await expect(httpResponse).toEqual({
+      ...httpResult,
+      date: new Date(httpResult.date)
+    })
   })
 })
