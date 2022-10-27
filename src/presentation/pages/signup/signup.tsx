@@ -62,7 +62,7 @@ const SignUp: React.FC<Props> = ({
     }
   }
 
-  useEffect(() => {
+  const validate = (field: string): void => {
     const formData = {
       name: state.name,
       email: state.email,
@@ -70,23 +70,35 @@ const SignUp: React.FC<Props> = ({
       passwordConfirmation: state.passwordConfirmation
     }
 
-    const nameError = validation.validate('name', formData)
-    const emailError = validation.validate('email', formData)
-    const passwordError = validation.validate('password', formData)
-    const passwordConfirmationError = validation.validate(
-      'passwordConfirmation',
-      formData
-    )
+    setState(oldState => ({
+      ...oldState,
+      [`${field}Error`]: validation.validate(field, formData)
+    }))
 
-    setState({
-      ...state,
-      isFormInvalid: !!nameError || !!emailError || !!passwordError || !!passwordConfirmationError,
-      nameError,
-      emailError,
-      passwordError,
-      passwordConfirmationError
-    })
-  }, [state.name, state.email, state.password, state.passwordConfirmation])
+    setState(oldState => ({
+      ...oldState,
+      isFormInvalid: !!oldState.nameError ||
+        !!oldState.emailError ||
+        !!oldState.passwordError ||
+        !!oldState.passwordConfirmationError
+    }))
+  }
+
+  useEffect(() => {
+    validate('name')
+  }, [state.name])
+
+  useEffect(() => {
+    validate('email')
+  }, [state.email])
+
+  useEffect(() => {
+    validate('password')
+  }, [state.password])
+
+  useEffect(() => {
+    validate('passwordConfirmation')
+  }, [state.passwordConfirmation])
 
   return (
     <div className={Styles.signupWrap}>

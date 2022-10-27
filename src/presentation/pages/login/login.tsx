@@ -56,22 +56,27 @@ const Login: React.FC<Props> = ({
     }
   }
 
+  const validate = (field: string): void => {
+    const formData = { email: state.email, password: state.password }
+
+    setState(oldState => ({
+      ...oldState,
+      [`${field}Error`]: validation.validate(field, formData)
+    }))
+
+    setState(oldState => ({
+      ...oldState,
+      isFormInvalid: !!oldState.emailError || !!oldState.passwordError
+    }))
+  }
+
   useEffect(() => {
-    const formData = {
-      email: state.email,
-      password: state.password
-    }
+    validate('email')
+  }, [state.email])
 
-    const emailError = validation.validate('email', formData)
-    const passwordError = validation.validate('password', formData)
-
-    setState({
-      ...state,
-      isFormInvalid: !!emailError || !!passwordError,
-      emailError,
-      passwordError
-    })
-  }, [state.email, state.password])
+  useEffect(() => {
+    validate('password')
+  }, [state.password])
 
   return (
     <div className={Styles.loginWrap}>
