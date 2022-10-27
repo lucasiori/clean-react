@@ -1,4 +1,4 @@
-import { AccessDeniedError } from '@/domain/errors'
+import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { HttpGetClient, HttpStatusCode } from '@/data/protocols/http'
 
 export class RemoteLoadSurveyResult {
@@ -12,7 +12,8 @@ export class RemoteLoadSurveyResult {
 
     switch (httpResponse.statusCode) {
       case HttpStatusCode.ok: break
-      default: throw new AccessDeniedError()
+      case HttpStatusCode.forbidden: throw new AccessDeniedError()
+      default: throw new UnexpectedError()
     }
   }
 }
