@@ -1,4 +1,6 @@
 import { faker } from '@faker-js/faker'
+import { AccessDeniedError } from '@/domain/errors'
+import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpGetClientSpy } from '@/data/test'
 import { RemoteLoadSurveyResult } from './remote-load-survey-result'
 
@@ -15,12 +17,23 @@ const makeSut = (url = faker.internet.url()): SutType => {
 }
 
 describe('RemoteLoadSurveyResult', () => {
-  test('should call HttpGetClient with correct url', async () => {
+  test('should call HttpGetClient with correct URL', async () => {
     const url = faker.internet.url()
     const { sut, httpGetClientSpy } = makeSut(url)
 
     await sut.load()
 
     expect(httpGetClientSpy.url).toBe(url)
+  })
+
+  test('should throw AccessDeniedError if HttpGetClient returns 403', async () => {
+    const { sut, httpGetClientSpy } = makeSut()
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.forbidden
+    }
+
+    const promise = sut.load()
+
+    await expect(promise).rejects.toThrow(new AccessDeniedError())
   })
 })
