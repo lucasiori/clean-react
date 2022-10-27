@@ -4,6 +4,7 @@ import * as Http from '../utils/http-mocks'
 const path = /surveys/
 const mockUnexpectedError = (): void => Http.mockServerError('GET', path)
 const mockAccessDeniedError = (): void => Http.mockForbiddenError('GET', path)
+const mockSuccess = (): void => Http.mockOk('GET', path, 'fx:survey-list')
 
 describe('SurveyList', () => {
   beforeEach(() => {
@@ -17,6 +18,16 @@ describe('SurveyList', () => {
     cy.visit('')
 
     cy.getByTestId('error').should('contain.text', 'Algo de errado aconteceu. Tente novamente em breve.')
+  })
+
+  it('should reload on button click', () => {
+    mockUnexpectedError()
+    cy.visit('')
+
+    mockSuccess()
+    cy.getByTestId('reload').click()
+
+    cy.get('li:not(:empty)').should('have.length', 2)
   })
 
   it('should logout on AccessDeniedError', () => {
@@ -41,5 +52,31 @@ describe('SurveyList', () => {
     cy.getByTestId('logout').click()
 
     Helper.testUrl('/login')
+  })
+
+  it('should present survey items', () => {
+    mockSuccess()
+    cy.visit('')
+
+    cy.get('li:empty').should('have.length', 4)
+    cy.get('li:not(:empty)').should('have.length', 2)
+    cy.get('li:nth-child(1)').then(element => {
+      assert.equal(element.find('[data-testid="day"]').text(), '03')
+      assert.equal(element.find('[data-testid="month"]').text(), 'fev')
+      assert.equal(element.find('[data-testid="year"]').text(), '2018')
+      assert.equal(element.find('[data-testid="question"]').text(), 'Question 1')
+      cy.fixture('icons').then(icon => {
+        assert.equal(element.find('[data-testid="icon"]').attr('src'), icon.thumbUp)
+      })
+    })
+    cy.get('li:nth-child(2)').then(element => {
+      assert.equal(element.find('[data-testid="day"]').text(), '20')
+      assert.equal(element.find('[data-testid="month"]').text(), 'out')
+      assert.equal(element.find('[data-testid="year"]').text(), '2020')
+      assert.equal(element.find('[data-testid="question"]').text(), 'Question 2')
+      cy.fixture('icons').then(icon => {
+        assert.equal(element.find('[data-testid="icon"]').attr('src'), icon.thumbDown)
+      })
+    })
   })
 })
