@@ -1,6 +1,7 @@
 /node_modules
 /coverage
 /dist
+/public
 .vscode
 *.scss
 *.json

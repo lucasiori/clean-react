@@ -31,6 +31,7 @@ module.exports = merge(common, {
       }
     ]
   },
+  devtool: 'inline-source-map',
   devServer: {
     static: './public',
     historyApiFallback: true,
