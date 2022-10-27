@@ -4,3 +4,8 @@ node_js:
 script:
   - eslint 'scr/**'
   - npm run test:coveralls
+build:
+  provider: heroku
+  api_key: $HEROKU_API
+  app: 'fordevs-react'
+  skip_cleanup: true
