@@ -1,6 +1,6 @@
 {
   "name": "clean-react",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "React JS using TDD, Clean Architecture and Typescript",
   "main": "index.js",
   "scripts": {
