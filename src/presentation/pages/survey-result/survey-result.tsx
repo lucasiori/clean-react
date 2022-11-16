@@ -1,5 +1,5 @@
 import React from 'react'
-import { Footer, Header, Loading } from '@/presentation/components'
+import { Calendar, Footer, Header, Loading } from '@/presentation/components'
 import Styles from './survey-result-styles.scss'
 
 const SurveyResult: React.FC = () => {
@@ -8,7 +8,10 @@ const SurveyResult: React.FC = () => {
       <Header />
 
       <div className={Styles.contentWrap}>
-        <h2>Qual é seu framework web favorito?</h2>
+        <hgroup>
+          <Calendar date={new Date()} className={Styles.calendarWrap} />
+          <h2>Qual é seu framework web favorito?</h2>
+        </hgroup>
 
         <ul className={Styles.answersList}>
           <li>
