@@ -15,7 +15,7 @@ type Props = {
 
 const SurveyList: React.FC<Props> = ({ loadSurveyList }) => {
   const handleError = useErrorHandler((error: Error) => {
-    setState({ ...state, error: error.message })
+    setState(oldState => ({ ...oldState, error: error.message }))
   })
 
   const [state, setState] = useState({
@@ -26,7 +26,7 @@ const SurveyList: React.FC<Props> = ({ loadSurveyList }) => {
 
   useEffect(() => {
     loadSurveyList.loadAll()
-      .then((surveys) => setState({ ...state, surveys }))
+      .then((surveys) => setState(oldState => ({ ...oldState, surveys })))
       .catch(handleError)
   }, [state.reload])
 
