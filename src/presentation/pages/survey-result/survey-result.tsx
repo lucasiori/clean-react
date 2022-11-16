@@ -8,32 +8,36 @@ const SurveyResult: React.FC = () => {
       <Header />
 
       <div className={Styles.contentWrap}>
-        <hgroup>
-          <Calendar date={new Date()} className={Styles.calendarWrap} />
-          <h2>Qual é seu framework web favorito?</h2>
-        </hgroup>
+        {false && (
+          <>
+            <hgroup>
+              <Calendar date={new Date()} className={Styles.calendarWrap} />
+              <h2>Qual é seu framework web favorito?</h2>
+            </hgroup>
 
-        <ul className={Styles.answersList}>
-          <li>
-            <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
-            <span className={Styles.answer}>ReactJS</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
+            <ul className={Styles.answersList}>
+              <li>
+                <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
+                <span className={Styles.answer}>ReactJS</span>
+                <span className={Styles.percent}>50%</span>
+              </li>
 
-          <li className={Styles.active}>
-            <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
-            <span className={Styles.answer}>ReactJS</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
+              <li className={Styles.active}>
+                <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
+                <span className={Styles.answer}>ReactJS</span>
+                <span className={Styles.percent}>50%</span>
+              </li>
 
-          <li>
-            <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
-            <span className={Styles.answer}>ReactJS</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
-        </ul>
+              <li>
+                <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
+                <span className={Styles.answer}>ReactJS</span>
+                <span className={Styles.percent}>50%</span>
+              </li>
+            </ul>
 
-        <button type="button">Voltar</button>
+            <button type="button">Voltar</button>
+          </>
+        )}
 
         {false && <Loading />}
       </div>
