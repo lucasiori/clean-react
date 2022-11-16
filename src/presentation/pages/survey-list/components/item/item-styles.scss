@@ -31,33 +31,9 @@
       right: -10px;
     }
 
-    time {
-      width: 60px;
-      height: 100px;
-      display: flex;
-      flex-shrink: 0;
-      flex-direction: column;
+    .calendarWrap {
       align-self: center;
-      align-items:  center;
-      justify-content: center;
-      background-color: $primaryLight;
-      border-radius: 8px;
-      color: $white;
       margin-left: 24px;
-
-      .day {
-        font-size: 40px;
-        font-weight: bold;
-      }
-
-      .month {
-        text-transform: lowercase;
-        margin: 0 0 4px;
-      }
-
-      .year {
-        font-size: 16px;
-      }
     }
 
     p {
