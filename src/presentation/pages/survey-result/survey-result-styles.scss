@@ -62,36 +62,5 @@
     button {
       margin-top: 24px;
     }
-
-    .loadingWrap {
-      position: fixed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba($white, 0.8);
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      cursor: wait;
-
-      .loading {
-        width: 300px;
-        height: 150px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba($black, 0.9);
-        border-radius: 8px;
-
-        span {
-          color: $white;
-          font-size: 16px;
-          text-transform: lowercase;
-          margin-bottom: 8px;
-        }
-      }
-    }
   }
 }
