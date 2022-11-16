@@ -1,0 +1,97 @@
+@import '../../styles/colors.scss';
+
+.surveyResultWrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: $disabledBackground;
+
+  .contentWrap {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-self: center;
+    padding: 40px;
+
+    h2 {
+      color: $primaryDark;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .answersList {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+
+      li {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        background-color: $white;
+        border-radius: 8px;
+        color: $primaryDark;
+        padding: 16px;
+        margin-top: 16px;
+
+        &.active {
+          border: 2px solid $primaryLight;
+        }
+
+        img {
+          width: 50px;
+          height: 50px;
+        }
+
+        .answer {
+          flex-grow: 1;
+          font-size: 20px;
+          margin: 0px 16px;
+        }
+      
+        .percentage {
+          font-size: 30px;
+        }
+      }
+    }
+
+    button {
+      margin-top: 24px;
+    }
+
+    .loadingWrap {
+      position: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba($white, 0.8);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      cursor: wait;
+
+      .loading {
+        width: 300px;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba($black, 0.9);
+        border-radius: 8px;
+
+        span {
+          color: $white;
+          font-size: 16px;
+          text-transform: lowercase;
+          margin-bottom: 8px;
+        }
+      }
+    }
+  }
+}
