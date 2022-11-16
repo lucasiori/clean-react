@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { LoadSurveyList } from '@/domain/usecases'
 import { useErrorHandler } from '@/presentation/hooks'
-import { Footer, Header } from '@/presentation/components'
-import {
-  SurveyContext,
-  SurveyError,
-  SurveyListItem
-} from '@/presentation/pages/survey-list/components'
+import { Error, Footer, Header } from '@/presentation/components'
+import { SurveyContext, SurveyListItem } from '@/presentation/pages/survey-list/components'
 import Styles from './survey-list-styles.scss'
 
 type Props = {
@@ -24,6 +20,10 @@ const SurveyList: React.FC<Props> = ({ loadSurveyList }) => {
     reload: false
   })
 
+  const reload = (): void => {
+    setState(oldState => ({ surveys: [], error: '', reload: oldState.reload }))
+  }
+
   useEffect(() => {
     loadSurveyList.loadAll()
       .then((surveys) => setState(oldState => ({ ...oldState, surveys })))
@@ -38,7 +38,11 @@ const SurveyList: React.FC<Props> = ({ loadSurveyList }) => {
         <h2>Enquetes</h2>
 
         <SurveyContext.Provider value={{ state, setState }}>
-          {state.error ? <SurveyError /> : <SurveyListItem />}
+          {
+            state.error
+              ? <Error error={state.error} reload={reload} />
+              : <SurveyListItem />
+          }
         </SurveyContext.Provider>
       </div>
 
