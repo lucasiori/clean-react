@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LoadSurveyResult } from '@/domain/usecases'
 import {
   Calendar,
@@ -9,12 +9,22 @@ import {
 } from '@/presentation/components'
 import Styles from './survey-result-styles.scss'
 
-const SurveyResult: React.FC = () => {
+type Props = {
+  loadSurveyResult: LoadSurveyResult
+}
+
+const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
   const [state] = useState({
     surveyResult: null as LoadSurveyResult.Model,
     isLoading: false,
     error: ''
   })
+
+  useEffect(() => {
+    loadSurveyResult.load()
+      .then()
+      .catch()
+  }, [])
 
   return (
     <div className={Styles.surveyResultWrap}>
