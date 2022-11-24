@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { LoadSurveyResult } from '@/domain/usecases'
 import { useErrorHandler } from '@/presentation/hooks'
 import {
@@ -15,6 +16,7 @@ type Props = {
 }
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
+  const { goBack } = useHistory()
   const handleError = useErrorHandler((error: Error) => {
     setState(oldState => ({
       ...oldState,
@@ -83,7 +85,9 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
               ))}
             </ul>
 
-            <button type="button">Voltar</button>
+            <button type="button" data-testid="back-button" onClick={goBack}>
+              Voltar
+            </button>
           </>
         )}
 
