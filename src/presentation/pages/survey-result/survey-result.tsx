@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { LoadSurveyResult } from '@/domain/usecases'
+import { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases'
 import { useErrorHandler } from '@/presentation/hooks'
 import {
   Error,
@@ -7,14 +7,18 @@ import {
   Header,
   Loading
 } from '@/presentation/components'
-import { SurveyResultData } from './components'
+import { SurveyResultContext, SurveyResultData } from './components'
 import Styles from './survey-result-styles.scss'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
+  saveSurveyResult: SaveSurveyResult
 }
 
-const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
+const SurveyResult: React.FC<Props> = ({
+  loadSurveyResult,
+  saveSurveyResult
+}) => {
   const handleError = useErrorHandler((error: Error) => {
     setState(oldState => ({
       ...oldState,
@@ -39,6 +43,13 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
     }))
   }
 
+  const onAnswer = (answer: string): void => {
+    setState(oldState => ({ ...oldState, isLoading: true }))
+    saveSurveyResult.save({ answer })
+      .then()
+      .catch()
+  }
+
   useEffect(() => {
     loadSurveyResult.load()
       .then((surveyResult) => {
@@ -51,13 +62,15 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
     <div className={Styles.surveyResultWrap}>
       <Header />
 
-      <div className={Styles.contentWrap} data-testid="survey-result">
-        {state.surveyResult && (
-          <SurveyResultData surveyResult={state.surveyResult} />
-        )}
-        {state.isLoading && <Loading />}
-        {state.error && <Error error={state.error} reload={reload} />}
-      </div>
+      <SurveyResultContext.Provider value={{ onAnswer }}>
+        <div className={Styles.contentWrap} data-testid="survey-result">
+          {state.surveyResult && (
+            <SurveyResultData surveyResult={state.surveyResult} />
+          )}
+          {state.isLoading && <Loading />}
+          {state.error && <Error error={state.error} reload={reload} />}
+        </div>
+      </SurveyResultContext.Provider>
 
       <Footer />
     </div>
