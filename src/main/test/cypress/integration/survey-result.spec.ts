@@ -56,4 +56,14 @@ describe('SurveyResult', () => {
       assert.equal(element.find('[data-testid="percent"]').text(), '30%')
     })
   })
+
+  it('should go to SurveyList on back button click', () => {
+    mockSuccess()
+    cy.visit('/')
+    cy.visit('/surveys/any_id')
+
+    cy.getByTestId('back-button').click()
+
+    Helper.testUrl('/')
+  })
 })
