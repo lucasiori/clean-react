@@ -2,6 +2,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { LoadSurveyResult } from '@/domain/usecases'
 import { Calendar } from '@/presentation/components'
+import { Answer } from '@/presentation/pages/survey-result/components'
 import Styles from './result-styles.scss'
 
 type Props = {
@@ -20,25 +21,7 @@ const Result: React.FC<Props> = ({ surveyResult }) => {
 
       <ul className={Styles.answersList} data-testid="answers">
         {surveyResult.answers.map((answer) => (
-          <li
-            key={answer.answer}
-            className={answer.isCurrentAccountAnswer ? Styles.active : ''}
-            data-testid="answer-wrap"
-          >
-            {!!answer.image && (
-              <img
-                src={answer.image}
-                alt={answer.answer}
-                data-testid="image"
-              />
-            )}
-            <span className={Styles.answer} data-testid="answer">
-              {answer.answer}
-            </span>
-            <span className={Styles.percent} data-testid="percent">
-              {answer.percent}%
-            </span>
-          </li>
+          <Answer key={answer.answer} answer={answer} />
         ))}
       </ul>
 
