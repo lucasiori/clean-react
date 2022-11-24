@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { LoadSurveyResult } from '@/domain/usecases'
+import { useErrorHandler } from '@/presentation/hooks'
 import {
   Calendar,
   Error,
@@ -14,6 +15,14 @@ type Props = {
 }
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
+  const handleError = useErrorHandler((error: Error) => {
+    setState(oldState => ({
+      ...oldState,
+      surveyResult: null,
+      error: error.message
+    }))
+  })
+
   const [state, setState] = useState({
     surveyResult: null as LoadSurveyResult.Model,
     isLoading: false,
@@ -25,7 +34,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }) => {
       .then((surveyResult) => {
         setState((oldState) => ({ ...oldState, surveyResult }))
       })
-      .catch()
+      .catch(handleError)
   }, [])
 
   return (
