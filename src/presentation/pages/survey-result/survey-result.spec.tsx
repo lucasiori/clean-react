@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory, MemoryHistory } from 'history'
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { AccountModel } from '@/domain/models'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import {
@@ -117,6 +117,22 @@ describe('SurveyResult Component', () => {
     await waitFor(() => {
       expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
       expect(history.location.pathname).toBe('/login')
+    })
+  })
+
+  test('should call LoadSurveyResult on reload', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    const error = new UnexpectedError()
+    jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(error)
+    makeSut(loadSurveyResultSpy)
+
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('reload'))
+    })
+
+    await waitFor(() => {
+      expect(loadSurveyResultSpy.callsCount).toBe(1)
+      screen.getByRole('heading')
     })
   })
 })
