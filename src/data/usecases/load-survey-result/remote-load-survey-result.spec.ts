@@ -74,7 +74,7 @@ describe('RemoteLoadSurveyResult', () => {
 
     const httpResponse = await sut.load()
 
-    await expect(httpResponse).toEqual({
+    expect(httpResponse).toEqual({
       ...httpResult,
       date: new Date(httpResult.date)
     })
