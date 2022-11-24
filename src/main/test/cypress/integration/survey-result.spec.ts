@@ -36,4 +36,24 @@ describe('SurveyResult', () => {
 
     Helper.testUrl('/login')
   })
+
+  it('should present survey items', () => {
+    mockSuccess()
+    cy.visit('/surveys/any_id')
+
+    cy.getByTestId('question').should('have.text', 'Question')
+    cy.getByTestId('day').should('have.text', '03')
+    cy.getByTestId('month').should('have.text', 'fev')
+    cy.getByTestId('year').should('have.text', '2018')
+    cy.get('li:nth-child(1)').then(element => {
+      assert.equal(element.find('[data-testid="answer"]').text(), 'any_answer')
+      assert.equal(element.find('[data-testid="image"]').attr('src'), 'any_image')
+      assert.equal(element.find('[data-testid="percent"]').text(), '70%')
+    })
+    cy.get('li:nth-child(2)').then(element => {
+      assert.equal(element.find('[data-testid="answer"]').text(), 'any_answer_2')
+      assert.notExists(element.find('[data-testid="image"]'))
+      assert.equal(element.find('[data-testid="percent"]').text(), '30%')
+    })
+  })
 })
