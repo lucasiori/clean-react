@@ -265,4 +265,18 @@ describe('SurveyResult Component', () => {
       expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
     })
   })
+
+  test('should present SurveyResult data on SaveSurveyResult success', async () => {
+    const { saveSurveyResultSpy } = makeSut()
+
+    await waitFor(() => {
+      const answersWrap = screen.queryAllByTestId('answer-wrap')
+      fireEvent.click(answersWrap[1])
+      fireEvent.click(answersWrap[1])
+    })
+
+    await waitFor(() => {
+      expect(saveSurveyResultSpy.callsCount).toBe(1)
+    })
+  })
 })
