@@ -1,4 +1,4 @@
-import { RemoteLoadSurveyList } from '@/data/usecases/load-survey-list/remote-load-survey-list'
+import { RemoteLoadSurveyList } from '@/data/usecases'
 import { LoadSurveyList } from '@/domain/usecases'
 import { makeApiUrl } from '@/main/factories/http/api-url-factory'
 import { makeAuthorizeHttpGetClientDecorator } from '@/main/factories/decorators'
