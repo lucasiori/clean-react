@@ -7,18 +7,28 @@ import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import {
   LoadSurveyResultSpy,
   mockAccountModel,
-  mockSurveyResultModel
+  mockSurveyResultModel,
+  SaveSurveyResultSpy
 } from '@/domain/test'
 import { SurveyResult } from '@/presentation/pages'
 import { ApiContext } from '@/presentation/contexts'
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy
+  saveSurveyResultSpy: SaveSurveyResultSpy
   history: MemoryHistory
   setCurrentAccountMock: (account: AccountModel) => void
 }
 
-const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
+type SutParams = {
+  loadSurveyResultSpy?: LoadSurveyResultSpy
+  saveSurveyResultSpy?: SaveSurveyResultSpy
+}
+
+const makeSut = ({
+  loadSurveyResultSpy = new LoadSurveyResultSpy(),
+  saveSurveyResultSpy = new SaveSurveyResultSpy()
+}: SutParams = {}): SutTypes => {
   const history = createMemoryHistory({
     initialEntries: ['/', '/surveys/any_id'],
     initialIndex: 1
@@ -31,13 +41,17 @@ const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
       getCurrentAccount: () => mockAccountModel()
     }}>
       <Router history={history}>
-        <SurveyResult loadSurveyResult={loadSurveyResultSpy} />
+        <SurveyResult
+          loadSurveyResult={loadSurveyResultSpy}
+          saveSurveyResult={saveSurveyResultSpy}
+        />
       </Router>
     </ApiContext.Provider>
   )
 
   return {
     loadSurveyResultSpy,
+    saveSurveyResultSpy,
     history,
     setCurrentAccountMock
   }
@@ -67,7 +81,7 @@ describe('SurveyResult Component', () => {
       date: new Date('2020-01-10T00:00:00')
     })
     loadSurveyResultSpy.surveyResult = surveyResult
-    makeSut(loadSurveyResultSpy)
+    makeSut({ loadSurveyResultSpy })
 
     await waitFor(() => {
       const answersWrap = screen.queryAllByTestId('answer-wrap')
@@ -101,7 +115,7 @@ describe('SurveyResult Component', () => {
     const loadSurveyResultSpy = new LoadSurveyResultSpy()
     const error = new UnexpectedError()
     jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(error)
-    makeSut(loadSurveyResultSpy)
+    makeSut({ loadSurveyResultSpy })
 
     await waitFor(() => {
       expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
@@ -115,7 +129,7 @@ describe('SurveyResult Component', () => {
     jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(
       new AccessDeniedError()
     )
-    const { history, setCurrentAccountMock } = makeSut(loadSurveyResultSpy)
+    const { history, setCurrentAccountMock } = makeSut({ loadSurveyResultSpy })
 
     await waitFor(() => {
       expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
@@ -127,7 +141,7 @@ describe('SurveyResult Component', () => {
     const loadSurveyResultSpy = new LoadSurveyResultSpy()
     const error = new UnexpectedError()
     jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(error)
-    makeSut(loadSurveyResultSpy)
+    makeSut({ loadSurveyResultSpy })
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('reload'))
@@ -158,5 +172,19 @@ describe('SurveyResult Component', () => {
     })
 
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
+  })
+
+  test('should call SaveSurveyResult on non active answer click', async () => {
+    const { loadSurveyResultSpy, saveSurveyResultSpy } = makeSut()
+
+    await waitFor(() => {
+      const answersWrap = screen.queryAllByTestId('answer-wrap')
+      fireEvent.click(answersWrap[1])
+    })
+
+    expect(screen.getByTestId('loading')).toBeInTheDocument()
+    expect(saveSurveyResultSpy.params).toEqual({
+      answer: loadSurveyResultSpy.surveyResult.answers[1].answer
+    })
   })
 })
