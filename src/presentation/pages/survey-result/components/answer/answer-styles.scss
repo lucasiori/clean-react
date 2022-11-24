@@ -12,7 +12,7 @@
   margin-top: 16px;
 
   &.active {
-    box-shadow: 0 0 3px 2px rgba($primaryLight);
+    box-shadow: 0 0 3px 2px $primaryLight;
   }
 
   img {
@@ -27,7 +27,7 @@
     margin-right: 16px;
   }
 
-  .percentage {
+  .percent {
     font-size: 30px;
   }
 }
@@ -44,7 +44,7 @@
       font-size: 16px;
     }
   
-    .percentage {
+    .percent {
       font-size: 20px;
     }
   }
