@@ -2,7 +2,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { LoadSurveyResult } from '@/domain/usecases'
 import { Calendar } from '@/presentation/components'
-import { Answer } from '@/presentation/pages/survey-result/components'
+import { SurveyResultAnswer } from '@/presentation/pages/survey-result/components'
 import Styles from './result-styles.scss'
 
 type Props = {
@@ -21,7 +21,7 @@ const Result: React.FC<Props> = ({ surveyResult }) => {
 
       <ul className={Styles.answersList} data-testid="answers">
         {surveyResult.answers.map((answer) => (
-          <Answer key={answer.answer} answer={answer} />
+          <SurveyResultAnswer key={answer.answer} answer={answer} />
         ))}
       </ul>
 
