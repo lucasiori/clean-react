@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 import { Authentication } from '@/domain/usecases'
 import { Validation } from '@/presentation/protocols/validation'
 import { currentAccountState, Footer, LoginHeader } from '@/presentation/components'
@@ -16,6 +16,7 @@ const Login: React.FC<Props> = ({
   validation,
   authentication
 }) => {
+  const resetLoginState = useResetRecoilState(loginState)
   const history = useHistory()
   const { setCurrentAccount } = useRecoilValue(currentAccountState)
   const [state, setState] = useRecoilState(loginState)
@@ -59,13 +60,9 @@ const Login: React.FC<Props> = ({
     }))
   }
 
-  useEffect(() => {
-    validate('email')
-  }, [state.email])
-
-  useEffect(() => {
-    validate('password')
-  }, [state.password])
+  useEffect(() => validate('email'), [state.email])
+  useEffect(() => validate('password'), [state.password])
+  useEffect(resetLoginState, [])
 
   return (
     <div className={Styles.loginWrap}>
