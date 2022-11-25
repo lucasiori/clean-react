@@ -1,11 +1,11 @@
-import React, { useContext, memo } from 'react'
-import { Logo } from '@/presentation/components'
-import { ApiContext } from '@/presentation/contexts'
+import React, { memo } from 'react'
+import { useRecoilValue } from 'recoil'
+import { currentAccountState, Logo } from '@/presentation/components'
 import { useLogout } from '@/presentation/hooks'
 import Styles from './header-styles.scss'
 
 const Header: React.FC = () => {
-  const { getCurrentAccount } = useContext(ApiContext)
+  const { getCurrentAccount } = useRecoilValue(currentAccountState)
   const logout = useLogout()
 
   const buttonClick = (

@@ -1,8 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
-import { ApiContext } from '@/presentation/contexts'
-import { PrivateRoute } from '@/presentation/components'
+import { currentAccountState, PrivateRoute } from '@/presentation/components'
 import {
   makeLogin,
   makeSignUp,
@@ -15,24 +14,24 @@ import {
 } from '@/main/adapters/current-account-adapter'
 
 const Router: React.FC = () => {
+  const state = {
+    setCurrentAccount: setCurrentAccountAdapter,
+    getCurrentAccount: getCurrentAccountAdapter
+  }
+
   return (
-    <RecoilRoot>
-      <ApiContext.Provider
-        value={{
-          setCurrentAccount: setCurrentAccountAdapter,
-          getCurrentAccount: getCurrentAccountAdapter
-        }}
-      >
-        <BrowserRouter>
-          <Switch>
-            <Route path="/login" component={makeLogin} />
-            <Route path="/signup" component={makeSignUp} />
-            <Route path="/signup" component={makeSignUp} />
-            <PrivateRoute path="/" exact component={makeSurveyList} />
-            <PrivateRoute path="/surveys/:id" component={makeSurveyResult} />
-          </Switch>
-        </BrowserRouter>
-      </ApiContext.Provider>
+    <RecoilRoot
+      initializeState={({ set }) => set(currentAccountState, state)}
+    >
+      <BrowserRouter>
+        <Switch>
+          <Route path="/login" component={makeLogin} />
+          <Route path="/signup" component={makeSignUp} />
+          <Route path="/signup" component={makeSignUp} />
+          <PrivateRoute path="/" exact component={makeSurveyList} />
+          <PrivateRoute path="/surveys/:id" component={makeSurveyResult} />
+        </Switch>
+      </BrowserRouter>
     </RecoilRoot>
   )
 }

@@ -12,7 +12,7 @@ import {
   SaveSurveyResultSpy
 } from '@/domain/test'
 import { SurveyResult } from '@/presentation/pages'
-import { ApiContext } from '@/presentation/contexts'
+import { currentAccountState } from '@/presentation/components'
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy
@@ -35,20 +35,21 @@ const makeSut = ({
     initialIndex: 1
   })
   const setCurrentAccountMock = jest.fn()
+  const mockedState = {
+    setCurrentAccount: setCurrentAccountMock,
+    getCurrentAccount: mockAccountModel
+  }
 
   render(
-    <RecoilRoot>
-      <ApiContext.Provider value={{
-        setCurrentAccount: setCurrentAccountMock,
-        getCurrentAccount: () => mockAccountModel()
-      }}>
-        <Router history={history}>
+    <RecoilRoot
+      initializeState={({ set }) => set(currentAccountState, mockedState)}
+    >
+      <Router history={history}>
           <SurveyResult
-            loadSurveyResult={loadSurveyResultSpy}
-            saveSurveyResult={saveSurveyResultSpy}
-          />
-        </Router>
-      </ApiContext.Provider>
+          loadSurveyResult={loadSurveyResultSpy}
+          saveSurveyResult={saveSurveyResultSpy}
+        />
+      </Router>
     </RecoilRoot>
   )
 

@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { Authentication } from '@/domain/usecases'
-import { ApiContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validation'
-import { Footer, LoginHeader } from '@/presentation/components'
+import { currentAccountState, Footer, LoginHeader } from '@/presentation/components'
 import { FormStatus, Input, loginState, SubmitButton } from './components'
 import Styles from './login-styles.scss'
 
@@ -18,7 +17,7 @@ const Login: React.FC<Props> = ({
   authentication
 }) => {
   const history = useHistory()
-  const { setCurrentAccount } = useContext(ApiContext)
+  const { setCurrentAccount } = useRecoilValue(currentAccountState)
   const [state, setState] = useRecoilState(loginState)
 
   const handleSubmit = async (
