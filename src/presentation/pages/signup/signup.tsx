@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 import { AddAccount } from '@/domain/usecases'
 import { currentAccountState, Footer, LoginHeader } from '@/presentation/components'
 import { Validation } from '@/presentation/protocols/validation'
@@ -17,6 +17,7 @@ const SignUp: React.FC<Props> = ({
   addAccount
 }) => {
   const history = useHistory()
+  const resetSignupState = useResetRecoilState(signupState)
   const { setCurrentAccount } = useRecoilValue(currentAccountState)
   const [state, setState] = useRecoilState(signupState)
 
@@ -69,21 +70,11 @@ const SignUp: React.FC<Props> = ({
     }))
   }
 
-  useEffect(() => {
-    validate('name')
-  }, [state.name])
-
-  useEffect(() => {
-    validate('email')
-  }, [state.email])
-
-  useEffect(() => {
-    validate('password')
-  }, [state.password])
-
-  useEffect(() => {
-    validate('passwordConfirmation')
-  }, [state.passwordConfirmation])
+  useEffect(() => validate('name'), [state.name])
+  useEffect(() => validate('email'), [state.email])
+  useEffect(() => validate('password'), [state.password])
+  useEffect(() => validate('passwordConfirmation'), [state.passwordConfirmation])
+  useEffect(resetSignupState, [])
 
   return (
     <div className={Styles.signupWrap}>

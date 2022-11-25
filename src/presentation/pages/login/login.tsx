@@ -16,8 +16,8 @@ const Login: React.FC<Props> = ({
   validation,
   authentication
 }) => {
-  const resetLoginState = useResetRecoilState(loginState)
   const history = useHistory()
+  const resetLoginState = useResetRecoilState(loginState)
   const { setCurrentAccount } = useRecoilValue(currentAccountState)
   const [state, setState] = useRecoilState(loginState)
 
