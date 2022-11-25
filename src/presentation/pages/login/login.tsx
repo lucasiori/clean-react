@@ -60,9 +60,9 @@ const Login: React.FC<Props> = ({
     }))
   }
 
+  useEffect(() => resetLoginState(), [])
   useEffect(() => validate('email'), [state.email])
   useEffect(() => validate('password'), [state.password])
-  useEffect(resetLoginState, [])
 
   return (
     <div className={Styles.loginWrap}>

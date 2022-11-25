@@ -70,11 +70,11 @@ const SignUp: React.FC<Props> = ({
     }))
   }
 
+  useEffect(resetSignupState, [])
   useEffect(() => validate('name'), [state.name])
   useEffect(() => validate('email'), [state.email])
   useEffect(() => validate('password'), [state.password])
   useEffect(() => validate('passwordConfirmation'), [state.passwordConfirmation])
-  useEffect(resetSignupState, [])
 
   return (
     <div className={Styles.signupWrap}>
