@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases'
 import { useErrorHandler } from '@/presentation/hooks'
 import {
@@ -7,7 +8,11 @@ import {
   Header,
   Loading
 } from '@/presentation/components'
-import { SurveyResultContext, SurveyResultData } from './components'
+import {
+  onSurveyAnswerState,
+  SurveyResultData,
+  surveyResultState
+} from './components'
 import Styles from './survey-result-styles.scss'
 
 type Props = {
@@ -28,12 +33,8 @@ const SurveyResult: React.FC<Props> = ({
     }))
   })
 
-  const [state, setState] = useState({
-    surveyResult: null as LoadSurveyResult.Model,
-    isLoading: false,
-    reload: false,
-    error: ''
-  })
+  const [state, setState] = useRecoilState(surveyResultState)
+  const setOnAnswer = useSetRecoilState(onSurveyAnswerState)
 
   const reload = (): void => {
     setState(oldState => ({
@@ -63,19 +64,21 @@ const SurveyResult: React.FC<Props> = ({
       .catch(handleError)
   }, [state.reload])
 
+  useEffect(() => {
+    setOnAnswer({ onAnswer })
+  }, [])
+
   return (
     <div className={Styles.surveyResultWrap}>
       <Header />
 
-      <SurveyResultContext.Provider value={{ onAnswer }}>
-        <div className={Styles.contentWrap} data-testid="survey-result">
-          {state.surveyResult && (
-            <SurveyResultData surveyResult={state.surveyResult} />
-          )}
-          {state.isLoading && <Loading />}
-          {state.error && <Error error={state.error} reload={reload} />}
-        </div>
-      </SurveyResultContext.Provider>
+      <div className={Styles.contentWrap} data-testid="survey-result">
+        {state.surveyResult && (
+          <SurveyResultData surveyResult={state.surveyResult} />
+        )}
+        {state.isLoading && <Loading />}
+        {state.error && <Error error={state.error} reload={reload} />}
+      </div>
 
       <Footer />
     </div>
